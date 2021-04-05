@@ -1,9 +1,8 @@
-
 /************************************************************************
 University of Leeds
 School of Computing
 COMP2932- Compiler Design and Construction
-The Symbol Tables Module
+The Compiler Module
 
 I confirm that the following code has been developed and written by me and it is entirely the result of my own work.
 I also confirm that I have not copied any parts of this program from another person or any other source or facilitated someone to copy this program from me.
@@ -11,19 +10,44 @@ I confirm that I will not publish the program online or share it with anyone wit
 
 Student Name: Habib Chanchwelia
 Student ID: 201329422
-Email: sc19hc@leeds.ac.uk
+Email:	sc19hc@leeds.ac.uk
 Date Work Commenced: 1/04/2021
 *************************************************************************/
 
-#include "symbols.h"
+#include "compiler.h"
 
-Symbol_table_stack symbol_table_stack;
-symbol_table_stack.table[0] = 0
 
-int lookup_symbol(Symbol symbol) {
-
+int InitCompiler ()
+{
+	return 1;
 }
 
-int add_symbol(Symbol symbol) {
+ParserInfo compile (char* dir_name)
+{
+	ParserInfo p;
 
+	// write your code below
+
+
+	p.er = none;
+	return p;
 }
+
+int StopCompiler ()
+{
+
+
+	return 1;
+}
+
+
+#ifndef TEST_COMPILER
+int main ()
+{
+	InitCompiler ();
+	ParserInfo p = compile ("Pong");
+	PrintError (p);
+	StopCompiler ();
+	return 1;
+}
+#endif
