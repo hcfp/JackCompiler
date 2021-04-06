@@ -26,6 +26,7 @@ int InitCompiler()
 ParserInfo compile(char *dir_name)
 {
 	ParserInfo p;
+	p.er = none;
 	char cmd[128] = "cd ";
 	// write your code below
 	strcat(cmd, dir_name);
@@ -46,12 +47,24 @@ ParserInfo compile(char *dir_name)
 		jack_files[i][strlen(jack_files[i]) - 1] = '\0';
 		i++;
 	}
-	/*
+
 	int num_files = i;
+	printf("Compiling: ");
 	for (i = 0; i < num_files; i++)
-		printf("%s\n", jack_files[i]);
-	*/
-	p.er = none;
+		printf("%s ", jack_files[i]);
+	printf("\n");
+
+	char path[1024] = "";
+	strcpy(path, dir_name);
+
+	for (i = 0; i < num_files; i++)
+	{
+		strcat(path, "/");
+		strcat(path, jack_files[i]);
+		InitParser(path);
+		p = Parse();
+		strcpy(path, dir_name);
+	}
 	return p;
 }
 
