@@ -15,39 +15,35 @@ Date Work Commenced: 1/04/2021
 *************************************************************************/
 
 #include "compiler.h"
+#include "parser.h"
 
-
-int InitCompiler ()
+int InitCompiler()
 {
-	return 1;
 }
 
-ParserInfo compile (char* dir_name)
+ParserInfo compile(char *dir_name)
 {
 	ParserInfo p;
 
 	// write your code below
 
-
 	p.er = none;
 	return p;
 }
 
-int StopCompiler ()
+int StopCompiler()
 {
-
-
+	StopParser();
 	return 1;
 }
 
-
 #ifndef TEST_COMPILER
-int main ()
+int main()
 {
-	InitCompiler ();
-	ParserInfo p = compile ("Pong");
-	PrintError (p);
-	StopCompiler ();
+	InitCompiler();
+	ParserInfo p = compile("Pong");
+	PrintError(p);
+	StopCompiler();
 	return 1;
 }
 #endif

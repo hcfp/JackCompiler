@@ -6,7 +6,8 @@
 
 // define your own types and function prototypes for the symbol table(s) module below
 
-typedef struct {
+typedef struct
+{
     char name[128];
     char type[16];
     char kind[16];
@@ -15,13 +16,15 @@ typedef struct {
 
 Symbol symbol_table[128];
 
-typedef struct {
+typedef struct
+{
     Symbol table[128];
     int table_size;
 } Symbol_table;
 
-typedef struct  {
-    Symbol_table* table[128];
+typedef struct
+{
+    Symbol_table *table[128];
     int num_tables;
 } Symbol_table_stack;
 
