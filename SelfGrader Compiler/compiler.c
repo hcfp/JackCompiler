@@ -13,7 +13,9 @@ Student ID: 201329422
 Email:	sc19hc@leeds.ac.uk
 Date Work Commenced: 1/04/2021
 *************************************************************************/
-
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include "compiler.h"
 #include "parser.h"
 
@@ -24,9 +26,31 @@ int InitCompiler()
 ParserInfo compile(char *dir_name)
 {
 	ParserInfo p;
-
+	char cmd[128] = "cd ";
 	// write your code below
+	strcat(cmd, dir_name);
+	strcat(cmd, "; ls *.jack > files.txt");
+	system(cmd);
 
+	char files_path[128] = "";
+	strcat(files_path, dir_name);
+	strcat(files_path, "/files.txt");
+
+	FILE *fptr = NULL;
+	int i = 0;
+
+	char jack_files[128][128];
+	fptr = fopen(files_path, "r");
+	while (fgets(jack_files[i], 128, fptr))
+	{
+		jack_files[i][strlen(jack_files[i]) - 1] = '\0';
+		i++;
+	}
+	/*
+	int num_files = i;
+	for (i = 0; i < num_files; i++)
+		printf("%s\n", jack_files[i]);
+	*/
 	p.er = none;
 	return p;
 }
