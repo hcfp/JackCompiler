@@ -18,9 +18,12 @@ Date Work Commenced: 1/04/2021
 #include <stdio.h>
 #include "compiler.h"
 #include "parser.h"
+#include "symbols.h"
 
 int InitCompiler()
 {
+	Symbol_table_stack stack;
+	stack.num_tables = 0;
 }
 
 ParserInfo compile(char *dir_name)

@@ -14,8 +14,6 @@ typedef struct
     int number_of_kind;
 } Symbol;
 
-Symbol symbol_table[128];
-
 typedef struct
 {
     Symbol table[128];
@@ -24,7 +22,7 @@ typedef struct
 
 typedef struct
 {
-    Symbol_table *table[128];
+    Symbol_table stack[128];
     int num_tables;
 } Symbol_table_stack;
 

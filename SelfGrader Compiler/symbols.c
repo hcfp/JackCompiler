@@ -17,11 +17,9 @@ Date Work Commenced: 1/04/2021
 
 #include "symbols.h"
 
-Symbol_table_stack symbol_table_stack;
-//symbol_table_stack.table[0] = 0
-
 int lookup_symbol(Symbol symbol)
 {
+    
 }
 
 int add_symbol(Symbol symbol)
