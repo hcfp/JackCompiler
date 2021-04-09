@@ -33,7 +33,7 @@ ParserInfo classDeclar();
 
 void error(char *s)
 {
-	printf("%s", s);
+	printf("%s\n", s);
 }
 
 ParserInfo type()
@@ -475,7 +475,11 @@ ParserInfo varDeclarStatement()
 	}
 	if (!strcmp(next_token.lx, "var"))
 	{
+		Symbol symbol;
+		strcpy(symbol.kind, next_token.lx);
+		Token symbol_token = PeekNextToken();
 		parser_info = type();
+		strcpy(symbol.type, symbol_token.lx);
 		if (parser_info.er != none)
 		{
 			return parser_info;
@@ -489,7 +493,9 @@ ParserInfo varDeclarStatement()
 		}
 		if (next_token.tp == ID)
 		{
-			;
+			strcpy(symbol.name, next_token.lx);
+			symbol.kind_index = stack.stack[stack.top_of_stack].index.index_var++;
+			add_symbol(symbol);
 		}
 		else
 		{
@@ -517,6 +523,9 @@ ParserInfo varDeclarStatement()
 			}
 			if (next_token.tp == ID)
 			{
+				strcpy(symbol.name, next_token.lx);
+				symbol.kind_index = stack.stack[stack.top_of_stack].index.index_var++;
+				add_symbol(symbol);
 				next_token = PeekNextToken();
 				if (next_token.tp == ERR)
 				{
@@ -1208,7 +1217,12 @@ ParserInfo paramList()
 	}
 	else
 	{
+		Token symbol_token = PeekNextToken();
+		Symbol symbol;
 		parser_info = type();
+		strcpy(symbol.type, symbol_token.lx);
+		strcpy(symbol.kind, "arg");
+
 		if (parser_info.er != none)
 		{
 			return parser_info;
@@ -1222,7 +1236,9 @@ ParserInfo paramList()
 		}
 		if (next_token.tp == ID)
 		{
-			;
+			strcpy(symbol.name, next_token.lx);
+			symbol.kind_index = stack.stack[stack.top_of_stack].index.index_arg++;
+			add_symbol(symbol);
 		}
 		else
 		{
@@ -1241,7 +1257,10 @@ ParserInfo paramList()
 		while (next_token.tp == SYMBOL && !strcmp(next_token.lx, ","))
 		{
 			GetNextToken();
+			Symbol symbol;
 			parser_info = type();
+			strcpy(symbol.type, symbol_token.lx);
+			strcpy(symbol.kind, "arg");
 			if (parser_info.er != none)
 			{
 				return parser_info;
@@ -1255,6 +1274,9 @@ ParserInfo paramList()
 			}
 			if (next_token.tp == ID)
 			{
+				strcpy(symbol.name, next_token.lx);
+				symbol.kind_index = stack.stack[stack.top_of_stack].index.index_arg++;
+				add_symbol(symbol);
 				next_token = PeekNextToken();
 				if (next_token.tp == ERR)
 				{
@@ -1288,6 +1310,15 @@ ParserInfo subroutineDeclar()
 	}
 	if (!strcmp(next_token.lx, "constructor") || !strcmp(next_token.lx, "function") || !strcmp(next_token.lx, "method"))
 	{
+		add_stack_table();
+		if (!strcmp(next_token.lx, "method"))
+		{
+			Symbol symbol;
+			strcpy(symbol.name, "this");
+			strcpy(symbol.type, current_class);
+			strcpy(symbol.kind, "arg");
+			symbol.kind_index = stack.stack[stack.top_of_stack].index.index_arg++;
+		}
 		next_token = PeekNextToken();
 		if (next_token.tp == ERR)
 		{
@@ -1385,7 +1416,17 @@ ParserInfo classVarDeclar()
 	}
 	if (!strcmp(next_token.lx, "static") || !strcmp(next_token.lx, "field"))
 	{
+		int static_field;
+		if (!strcmp(next_token.lx, "static"))
+			static_field = 0;
+		else
+			static_field = 1;
+
+		Symbol symbol;
+		strcpy(symbol.kind, next_token.lx);
+		Token symbol_token = PeekNextToken();
 		parser_info = type();
+		strcpy(symbol.type, symbol_token.lx);
 		if (parser_info.er != none)
 		{
 			return parser_info;
@@ -1399,7 +1440,28 @@ ParserInfo classVarDeclar()
 		}
 		if (next_token.tp == ID)
 		{
-			;
+			strcpy(symbol.name, next_token.lx);
+			if (static_field == 0)
+			{
+				symbol.kind_index = stack.stack[stack.top_of_stack].index.index_static;
+				stack.stack[stack.top_of_stack].index.index_static++;
+			}
+			else
+			{
+				symbol.kind_index = stack.stack[stack.top_of_stack].index.index_field;
+				stack.stack[stack.top_of_stack].index.index_field++;
+			}
+			if (lookup_symbol_global(symbol) >= 0)
+			{
+				error("Redeclare var");
+				parser_info.er = redecIdentifier;
+				parser_info.tk = next_token;
+				return parser_info;
+			}
+			else
+			{
+				add_symbol(symbol);
+			}
 		}
 		else
 		{
@@ -1427,6 +1489,28 @@ ParserInfo classVarDeclar()
 			}
 			if (next_token.tp == ID)
 			{
+				strcpy(symbol.name, next_token.lx);
+				if (static_field == 0)
+				{
+					symbol.kind_index = stack.stack[stack.top_of_stack].index.index_static;
+					stack.stack[stack.top_of_stack].index.index_static++;
+				}
+				else
+				{
+					symbol.kind_index = stack.stack[stack.top_of_stack].index.index_field;
+					stack.stack[stack.top_of_stack].index.index_field++;
+				}
+				if (lookup_symbol_scope(symbol))
+				{
+					error("Redeclare var");
+					parser_info.er = redecIdentifier;
+					parser_info.tk = next_token;
+					return parser_info;
+				}
+				else
+				{
+					add_symbol(symbol);
+				}
 				next_token = PeekNextToken();
 				if (next_token.tp == ERR)
 				{
@@ -1531,6 +1615,7 @@ ParserInfo classDeclar()
 		}
 		if (next_token.tp == ID)
 		{
+			strcpy(current_class, next_token.lx);
 			next_token = GetNextToken();
 			if (next_token.tp == ERR)
 			{
@@ -1540,6 +1625,7 @@ ParserInfo classDeclar()
 			}
 			if (!strcmp(next_token.lx, "{"))
 			{
+				add_stack_table();
 				next_token = PeekNextToken();
 				while (!strcmp(next_token.lx, "static") || !strcmp(next_token.lx, "field") || !strcmp(next_token.lx, "constructor") || !strcmp(next_token.lx, "function") || !strcmp(next_token.lx, "method"))
 				{
@@ -1559,7 +1645,7 @@ ParserInfo classDeclar()
 				}
 				if (!strcmp(next_token.lx, "}"))
 				{
-					;
+					remove_stack_table();
 				}
 				else
 				{
