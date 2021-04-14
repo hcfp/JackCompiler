@@ -22,13 +22,14 @@ Date Work Commenced: 1/04/2021
 
 int InitCompiler()
 {
-	stack.top_of_stack = -1;
+	all_symbol_tables.table_size = 0;
 }
 
 ParserInfo compile(char *dir_name)
 {
 	ParserInfo p;
 	p.er = none;
+	//system("ls *.jack > libs.txt");
 	char cmd[128] = "cd ";
 	strcat(cmd, dir_name);
 	strcat(cmd, "; ls *.jack > files.txt");
@@ -64,7 +65,6 @@ ParserInfo compile(char *dir_name)
 		strcat(path, jack_files[i]);
 		InitParser(path);
 		p = Parse();
-		wipe_stack();
 		strcpy(path, dir_name);
 	}
 	return p;
@@ -72,7 +72,6 @@ ParserInfo compile(char *dir_name)
 
 int StopCompiler()
 {
-	wipe_stack();
 	StopParser();
 	return 1;
 }

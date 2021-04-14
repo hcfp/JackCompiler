@@ -9,5 +9,4 @@
 int InitCompiler();
 ParserInfo compile(char *dir_name);
 int StopCompiler();
-
 #endif
