@@ -27,20 +27,25 @@ Symbol_table *create_symbol_table()
     t->index.index_field = 0;
     t->index.index_static = 0;
     t->index.index_var = 0;
+    t->num_children = 0;
     for (int i = 0; i < 32; i++)
     {
         t->table[i] = NULL;
     }
+    for (int i = 0; i < 12; i++)
+    {
+        t->children[i] = NULL;
+    }
     t->parent = NULL;
-    t->child = NULL;
     return t;
 }
 
 Symbol_table *new_scope(Symbol_table *scope)
 {
     Symbol_table *t = create_symbol_table();
-    scope->child = t;
+    scope->children[scope->num_children++] = t;
     t->parent = scope;
+    current_scope = t;
     return t;
 }
 
@@ -69,9 +74,12 @@ int lookup_symbol_global(Symbol_table *t, Symbol symbol)
 int add_symbol(Symbol_table *t, Symbol *symbol)
 {
     t->table[t->table_size++] = symbol;
-    Symbol *s = t->table[t->table_size -1];
-    printf("\nName: %s\n", s->name);
-    printf("Type: %s\n", s->type);
-    printf("Kind: %s\n", s->kind);
-    printf("Index: %d\n", s->kind_index);
+    Symbol *s = t->table[t->table_size - 1];
+    if (!strcmp(s->kind, "var"))
+    {
+        printf("\nName: %s\n", s->name);
+        printf("Type: %s\n", s->type);
+        printf("Kind: %s\n", s->kind);
+        printf("Index: %d\n", s->kind_index);
+    }
 }

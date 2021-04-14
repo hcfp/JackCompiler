@@ -43,7 +43,8 @@ struct Symbol_table
     int table_size;
     Index index;
     struct Symbol_table *parent;
-    struct Symbol_table *child;
+    struct Symbol_table* children[12];
+    int num_children;
 };
 
 typedef struct Symbol_table Symbol_table;
