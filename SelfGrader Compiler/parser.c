@@ -1259,11 +1259,10 @@ ParserInfo paramList()
 	}
 	else
 	{
-		Token symbol_token = PeekNextToken();
-		Symbol symbol;
+		Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
 		parser_info = type();
-		strcpy(symbol.type, symbol_token.lx);
-		strcpy(symbol.kind, "arg");
+		strcpy(symbol->type, next_token.lx);
+		strcpy(symbol->kind, "arg");
 
 		if (parser_info.er != none)
 		{
@@ -1277,10 +1276,10 @@ ParserInfo paramList()
 			return parser_info;
 		}
 		if (next_token.tp == ID)
-		{ /*
-			strcpy(symbol.name, next_token.lx);
-			symbol.kind_index = stack.stack[stack.top_of_stack].index.index_arg++;
-			add_symbol(symbol);*/
+		{
+			strcpy(symbol->name, next_token.lx);
+			symbol->kind_index = current_scope->index.index_arg++;
+			add_symbol(current_scope, symbol);
 		}
 		else
 		{
@@ -1299,10 +1298,12 @@ ParserInfo paramList()
 		while (next_token.tp == SYMBOL && !strcmp(next_token.lx, ","))
 		{
 			GetNextToken();
-			Symbol symbol;
+			Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
+			Token symbol_token;
+			symbol_token = PeekNextToken();
 			parser_info = type();
-			strcpy(symbol.type, symbol_token.lx);
-			strcpy(symbol.kind, "arg");
+			strcpy(symbol->type, symbol_token.lx);
+			strcpy(symbol->kind, "arg");
 			if (parser_info.er != none)
 			{
 				return parser_info;
@@ -1315,10 +1316,10 @@ ParserInfo paramList()
 				return parser_info;
 			}
 			if (next_token.tp == ID)
-			{ /*
-				strcpy(symbol.name, next_token.lx);
-				symbol.kind_index = stack.stack[stack.top_of_stack].index.index_arg++;
-				add_symbol(symbol);*/
+			{
+				strcpy(symbol->name, next_token.lx);
+				symbol->kind_index = current_scope->index.index_arg++;
+				add_symbol(current_scope, symbol);
 				next_token = PeekNextToken();
 				if (next_token.tp == ERR)
 				{
