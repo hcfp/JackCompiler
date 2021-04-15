@@ -1667,6 +1667,10 @@ ParserInfo classDeclar()
 		if (next_token.tp == ID)
 		{
 			strcpy(current_class, next_token.lx);
+			Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
+			strcpy(symbol->name, current_class);
+			strcpy(symbol->kind, "class");
+			add_symbol(current_scope, symbol);
 			next_token = GetNextToken();
 			if (next_token.tp == ERR)
 			{
