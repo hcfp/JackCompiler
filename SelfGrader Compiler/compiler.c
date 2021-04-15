@@ -22,6 +22,7 @@ Date Work Commenced: 1/04/2021
 
 int InitCompiler()
 {
+	pass = 0;
 	all_symbol_tables.table_size = 0;
 }
 
@@ -75,6 +76,16 @@ ParserInfo compile(char *dir_name)
 	char path[32] = "";
 	strcpy(path, dir_name);
 
+	for (i = 0; i < num_files; i++)
+	{
+		strcat(path, "/");
+		strcat(path, jack_files[i]);
+		InitParser(path);
+		p = Parse();
+		strcpy(path, dir_name);
+	}
+
+	pass = 1;
 	for (i = 0; i < num_files; i++)
 	{
 		strcat(path, "/");

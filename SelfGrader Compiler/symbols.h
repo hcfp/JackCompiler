@@ -68,4 +68,6 @@ typedef struct
 All_symbol_tables all_symbol_tables;
 
 Symbol_table *current_scope;
+
+int pass;
 #endif
