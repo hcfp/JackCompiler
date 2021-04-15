@@ -35,20 +35,36 @@ ParserInfo compile(char *dir_name)
 	strcat(cmd, "; ls *.jack > files.txt");
 	//system(cmd);
 
-	char files_path[128] = "";
+	char files_path[32] = "";
 	strcat(files_path, dir_name);
 	strcat(files_path, "/files.txt");
 
 	FILE *fptr = NULL;
 	int i = 0;
 
-	char jack_files[128][128];
+	char lib_files[8][16];
+	fptr = fopen("libs.txt", "r");
+	while (fgets(lib_files[i], 32, fptr))
+	{
+		lib_files[i][strlen(lib_files[i]) - 1] = '\0';
+		i++;
+	}
+	fclose(fptr);
+
+	for(i = 0; i < 8; i++) {
+		InitParser(lib_files[i]);
+		p = Parse();
+	}
+
+	i = 0;
+	char jack_files[32][32];
 	fptr = fopen(files_path, "r");
-	while (fgets(jack_files[i], 128, fptr))
+	while (fgets(jack_files[i], 32, fptr))
 	{
 		jack_files[i][strlen(jack_files[i]) - 1] = '\0';
 		i++;
 	}
+	fclose(fptr);
 
 	int num_files = i;
 	printf("Compiling: ");
@@ -56,7 +72,7 @@ ParserInfo compile(char *dir_name)
 		printf("%s ", jack_files[i]);
 	printf("\n");
 
-	char path[1024] = "";
+	char path[32] = "";
 	strcpy(path, dir_name);
 
 	for (i = 0; i < num_files; i++)

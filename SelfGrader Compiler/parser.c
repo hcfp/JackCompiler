@@ -145,15 +145,7 @@ ParserInfo operand()
 		}
 		else if (next_token.tp == ID)
 		{
-			/*
-			Symbol symbol;
-			strcpy(symbol.name, next_token.lx);
-			if (lookup_symbol_global(symbol) == -1)
-			{
-				parser_info.er = undecIdentifier;
-				parser_info.tk = next_token;
-				return parser_info;
-			}*/
+			//TODO Check if declared - global
 			next_token = PeekNextToken();
 			if (next_token.tp == ERR)
 			{
@@ -506,6 +498,7 @@ ParserInfo varDeclarStatement()
 		}
 		if (next_token.tp == ID)
 		{
+			//TODO check if already declared - in scope
 			strcpy(symbol->name, next_token.lx);
 			symbol->kind_index = current_scope->index.index_var++;
 			add_symbol(current_scope, symbol);
@@ -539,6 +532,7 @@ ParserInfo varDeclarStatement()
 			}
 			if (next_token.tp == ID)
 			{
+				//TODO check if already declared - in scope
 				strcpy(symbol->name, next_token.lx);
 				symbol->kind_index = current_scope->index.index_var++;
 				add_symbol(current_scope, symbol);
@@ -609,15 +603,7 @@ ParserInfo letStatement()
 		}
 		if (next_token.tp == ID)
 		{
-			/*
-			Symbol symbol;
-			strcpy(symbol.name, next_token.lx);
-			if (lookup_symbol_global(symbol) == -1)
-			{
-				parser_info.er = undecIdentifier;
-				parser_info.tk = next_token;
-				return parser_info;
-			}*/
+			//TODO: Check ID is declared here - class scope
 			next_token = PeekNextToken();
 			if (next_token.tp == ERR)
 			{
@@ -773,6 +759,7 @@ ParserInfo ifStatement()
 		}
 		if (!strcmp(next_token.lx, "{"))
 		{
+			current_scope = new_scope(current_scope);
 			parser_info = subroutineBody();
 			if (parser_info.er != none)
 			{
@@ -798,6 +785,7 @@ ParserInfo ifStatement()
 			}
 			if (!strcmp(next_token.lx, "{"))
 			{
+				current_scope = new_scope(current_scope);
 				parser_info = subroutineBody();
 				if (parser_info.er != none)
 				{
@@ -878,6 +866,7 @@ ParserInfo whileStatement()
 		}
 		if (!strcmp(next_token.lx, "{"))
 		{
+			current_scope = new_scope(current_scope);
 			parser_info = subroutineBody();
 			if (parser_info.er != none)
 			{
@@ -908,15 +897,7 @@ ParserInfo subroutineCall()
 	}
 	if (next_token.tp == ID)
 	{
-		/*
-		Symbol symbol;
-		strcpy(symbol.name, next_token.lx);
-		if (lookup_symbol_global(symbol) == -1)
-		{
-			parser_info.er = undecIdentifier;
-			parser_info.tk = next_token;
-			return parser_info;
-		}*/
+		//TODO check subroutine is declared - global
 		next_token = PeekNextToken();
 		if (!strcmp(next_token.lx, "."))
 		{
@@ -929,15 +910,9 @@ ParserInfo subroutineCall()
 				return parser_info;
 			}
 			if (next_token.tp == ID)
-			{ /*
-				Symbol symbol;
-				strcpy(symbol.name, next_token.lx);
-				if (lookup_symbol_global(symbol) == -1)
-				{
-					parser_info.er = undecIdentifier;
-					parser_info.tk = next_token;
-					return parser_info;
-				}*/
+			{
+				//TODO check if declared - global
+				;
 			}
 			else
 			{

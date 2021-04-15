@@ -75,11 +75,10 @@ int add_symbol(Symbol_table *t, Symbol *symbol)
 {
     t->table[t->table_size++] = symbol;
     Symbol *s = t->table[t->table_size - 1];
-    if (!strcmp(s->kind, "arg"))
-    {
+/*
         printf("\nName: %s\n", s->name);
         printf("Type: %s\n", s->type);
         printf("Kind: %s\n", s->kind);
         printf("Index: %d\n", s->kind_index);
-    }
+*/
 }
