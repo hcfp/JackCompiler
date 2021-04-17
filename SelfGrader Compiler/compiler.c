@@ -21,7 +21,7 @@ Date Work Commenced: 1/04/2021
 #include "symbols.h"
 
 int pass;
-
+int parse_num;
 int InitCompiler()
 {
 	all_symbol_tables.table_size = 0;
@@ -42,7 +42,7 @@ ParserInfo compile(char *dir_name)
 
 	FILE *fptr = NULL;
 	int i = 0;
-
+	pass = 0;
 	char lib_files[8][16];
 	fptr = fopen("libs.txt", "r");
 	while (fgets(lib_files[i], 32, fptr))
@@ -76,7 +76,6 @@ ParserInfo compile(char *dir_name)
 	char path[32] = "";
 	strcpy(path, dir_name);
 
-	pass = 0;
 	for (i = 0; i < num_files; i++)
 	{
 		strcat(path, "/");
@@ -90,10 +89,10 @@ ParserInfo compile(char *dir_name)
 	}
 
 	pass = 1;
-	for (i = 0; i < num_files; i++)
+	for (parse_num = 0; parse_num < num_files; parse_num++)
 	{
 		strcat(path, "/");
-		strcat(path, jack_files[i]);
+		strcat(path, jack_files[parse_num]);
 		InitParser(path);
 		p = Parse();
 		strcpy(path, dir_name);
@@ -112,7 +111,7 @@ int main()
 {
 	InitCompiler();
 	ParserInfo p = compile("Pong");
-	PrintError(p);
+	//PrintError(p);
 	StopCompiler();
 	return 1;
 }

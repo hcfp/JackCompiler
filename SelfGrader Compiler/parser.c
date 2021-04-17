@@ -7,6 +7,7 @@
 #include "symbols.h"
 
 extern int pass;
+extern int parse_num;
 // you can declare prototypes of parser functions below
 
 ParserInfo type();
@@ -783,6 +784,10 @@ ParserInfo ifStatement()
 			{
 				current_scope = new_scope(current_scope);
 			}
+			else
+			{
+				current_sematic_scope = current_sematic_scope->children[current_sematic_scope->children_visited++];
+			}
 			parser_info = subroutineBody();
 			if (parser_info.er != none)
 			{
@@ -811,6 +816,10 @@ ParserInfo ifStatement()
 				if (!pass)
 				{
 					current_scope = new_scope(current_scope);
+				}
+				else
+				{
+					current_sematic_scope = current_sematic_scope->children[current_sematic_scope->children_visited++];
 				}
 				parser_info = subroutineBody();
 				if (parser_info.er != none)
@@ -895,6 +904,10 @@ ParserInfo whileStatement()
 			if (!pass)
 			{
 				current_scope = new_scope(current_scope);
+			}
+			else
+			{
+				current_sematic_scope = current_sematic_scope->children[current_sematic_scope->children_visited++];
 			}
 			parser_info = subroutineBody();
 			if (parser_info.er != none)
@@ -1163,8 +1176,16 @@ ParserInfo subroutineBody()
 		}
 		if (!strcmp(next_token.lx, "}"))
 		{
-			if (current_scope->parent != NULL)
-				current_scope = current_scope->parent;
+			if (!pass)
+			{
+				if (current_scope->parent != NULL)
+					current_scope = current_scope->parent;
+			}
+			else
+			{
+				if (current_sematic_scope->parent != NULL)
+					current_sematic_scope = current_sematic_scope->parent;
+			}
 		}
 		else
 		{
@@ -1448,6 +1469,10 @@ ParserInfo subroutineDeclar()
 						current_scope = new_scope(current_scope);
 					}
 				}
+				else
+				{
+					current_sematic_scope = current_sematic_scope->children[current_sematic_scope->children_visited++];
+				}
 				parser_info = paramList();
 				if (parser_info.er != none)
 				{
@@ -1708,6 +1733,10 @@ ParserInfo classDeclar()
 			Symbol_table *class_scope = create_symbol_table();
 			current_scope = class_scope;
 			all_symbol_tables.table[all_symbol_tables.table_size++] = current_scope;
+		}
+		else
+		{
+			current_sematic_scope = all_symbol_tables.table[8 + parse_num];
 		}
 		next_token = GetNextToken();
 		if (next_token.tp == ERR)

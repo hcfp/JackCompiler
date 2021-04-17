@@ -45,6 +45,7 @@ struct Symbol_table
     struct Symbol_table *parent;
     struct Symbol_table* children[12];
     int num_children;
+    int children_visited;
 };
 
 typedef struct Symbol_table Symbol_table;
@@ -71,4 +72,5 @@ All_symbol_tables all_symbol_tables;
 
 Symbol_table *current_scope;
 
+Symbol_table *current_sematic_scope;
 #endif

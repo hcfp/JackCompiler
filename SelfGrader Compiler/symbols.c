@@ -28,6 +28,7 @@ Symbol_table *create_symbol_table()
     t->index.index_static = 0;
     t->index.index_var = 0;
     t->num_children = 0;
+    t->children_visited = 0;
     for (int i = 0; i < 32; i++)
     {
         t->table[i] = NULL;
