@@ -34,7 +34,7 @@ ParserInfo classDeclar();
 
 void error(char *s)
 {
-	printf("%s\n", s);
+	printf("\n%s\n", s);
 }
 
 ParserInfo type()
@@ -68,7 +68,7 @@ ParserInfo type()
 	}
 	else
 	{
-		error("Expected a type\n");
+		error("Expected a type");
 		parser_info.er = syntaxError;
 		parser_info.tk = next_token;
 		return parser_info;
@@ -204,7 +204,7 @@ ParserInfo operand()
 				}
 				else
 				{
-					error("Expected ]\n");
+					error("Expected ]");
 					parser_info.er = closeBracketExpected;
 					parser_info.tk = next_token;
 					return parser_info;
@@ -233,7 +233,7 @@ ParserInfo operand()
 					}
 					else
 					{
-						error("Expected )\n");
+						error("Expected )");
 						parser_info.er = closeParenExpected;
 						parser_info.tk = next_token;
 						return parser_info;
@@ -262,7 +262,7 @@ ParserInfo operand()
 			}
 			else
 			{
-				error("expected )\n");
+				error("expected )");
 				parser_info.er = closeParenExpected;
 				parser_info.tk = next_token;
 				return parser_info;
@@ -271,7 +271,7 @@ ParserInfo operand()
 	}
 	else
 	{
-		error("Expected an operand\n");
+		error("Expected an operand");
 		parser_info.er = syntaxError;
 		parser_info.tk = next_token;
 		return parser_info;
@@ -566,7 +566,7 @@ ParserInfo varDeclarStatement()
 			}
 			else
 			{
-				error("Expected ID\n");
+				error("Expected ID");
 				parser_info.er = idExpected;
 				parser_info.tk = next_token;
 				return parser_info;
@@ -585,7 +585,7 @@ ParserInfo varDeclarStatement()
 		}
 		else
 		{
-			error("Expected ;\n");
+			error("Expected ;");
 			parser_info.er = semicolonExpected;
 			parser_info.tk = next_token;
 			return parser_info;
@@ -593,7 +593,7 @@ ParserInfo varDeclarStatement()
 	}
 	else
 	{
-		error("Expected var\n");
+		error("Expected var");
 		parser_info.er = syntaxError;
 		parser_info.tk = next_token;
 		return parser_info;
@@ -652,7 +652,7 @@ ParserInfo letStatement()
 				}
 				else
 				{
-					error("Expected ]\n");
+					error("Expected ]");
 					parser_info.er = closeBracketExpected;
 					parser_info.tk = next_token;
 					return parser_info;
@@ -675,7 +675,7 @@ ParserInfo letStatement()
 			}
 			else
 			{
-				error("Expected =\n");
+				error("Expected =");
 				parser_info.er = equalExpected;
 				parser_info.tk = next_token;
 				return parser_info;
@@ -693,7 +693,7 @@ ParserInfo letStatement()
 			}
 			else
 			{
-				error("Expected ;\n");
+				error("Expected ;");
 				parser_info.er = semicolonExpected;
 				parser_info.tk = next_token;
 				return parser_info;
@@ -701,7 +701,7 @@ ParserInfo letStatement()
 		}
 		else
 		{
-			error("Expected ID\n");
+			error("Expected ID");
 			parser_info.er = idExpected;
 			parser_info.tk = next_token;
 			return parser_info;
@@ -709,7 +709,7 @@ ParserInfo letStatement()
 	}
 	else
 	{
-		error("Let expected\n");
+		error("Let expected");
 		parser_info.er = syntaxError;
 		parser_info.tk = next_token;
 		return parser_info;
@@ -765,7 +765,7 @@ ParserInfo ifStatement()
 		}
 		else
 		{
-			error("Expected )\n");
+			error("Expected )");
 			parser_info.er = closeParenExpected;
 			parser_info.tk = next_token;
 			return parser_info;
@@ -820,7 +820,7 @@ ParserInfo ifStatement()
 			}
 			else
 			{
-				error("Expected {\n");
+				error("Expected {");
 				parser_info.er = openBraceExpected;
 				parser_info.tk = next_token;
 				return parser_info;
@@ -860,7 +860,7 @@ ParserInfo whileStatement()
 		}
 		else
 		{
-			error("Expected a (\n");
+			error("Expected a (");
 			parser_info.er = openParenExpected;
 			parser_info.tk = next_token;
 			return parser_info;
@@ -878,7 +878,7 @@ ParserInfo whileStatement()
 		}
 		else
 		{
-			error("Expected )\n");
+			error("Expected )");
 			parser_info.er = closeParenExpected;
 			parser_info.tk = next_token;
 			return parser_info;
@@ -904,7 +904,7 @@ ParserInfo whileStatement()
 		}
 		else
 		{
-			error("Expected a {\n");
+			error("Expected a {");
 			parser_info.er = openBraceExpected;
 			parser_info.tk = next_token;
 			return parser_info;
@@ -968,7 +968,7 @@ ParserInfo subroutineCall()
 		}
 		else
 		{
-			error("Expected (\n");
+			error("Expected (");
 			parser_info.er = openParenExpected;
 			parser_info.tk = next_token;
 			return parser_info;
@@ -986,7 +986,7 @@ ParserInfo subroutineCall()
 		}
 		else
 		{
-			error("Expected )\n");
+			error("Expected )");
 			parser_info.er = closeParenExpected;
 			parser_info.tk = next_token;
 			return parser_info;
@@ -994,7 +994,7 @@ ParserInfo subroutineCall()
 	}
 	else
 	{
-		error("Expected an identifier\n");
+		error("Expected an identifier");
 		parser_info.er = idExpected;
 		parser_info.tk = next_token;
 		return parser_info;
@@ -1033,7 +1033,7 @@ ParserInfo doStatement()
 		}
 		else
 		{
-			error("Expected ;\n");
+			error("Expected ;");
 			parser_info.er = semicolonExpected;
 			parser_info.tk = next_token;
 			return parser_info;
@@ -1082,7 +1082,7 @@ ParserInfo returnStatement()
 			}
 			else
 			{
-				error("Expected ;\n");
+				error("Expected ;");
 				parser_info.er = semicolonExpected;
 				parser_info.tk = next_token;
 				return parser_info;
@@ -1103,7 +1103,7 @@ ParserInfo returnStatement()
 			}
 			else
 			{
-				error("Expected ;\n");
+				error("Expected ;");
 				parser_info.er = semicolonExpected;
 				parser_info.tk = next_token;
 				return parser_info;
@@ -1176,7 +1176,7 @@ ParserInfo subroutineBody()
 	}
 	else
 	{
-		error("Expected {\n");
+		error("Expected {");
 		parser_info.er = openBraceExpected;
 		parser_info.tk = next_token;
 		return parser_info;
@@ -1347,7 +1347,7 @@ ParserInfo paramList()
 			}
 			else
 			{
-				error("Expected ID\n");
+				error("Expected ID");
 				parser_info.er = idExpected;
 				parser_info.tk = next_token;
 				return parser_info;
@@ -1470,7 +1470,7 @@ ParserInfo subroutineDeclar()
 				}
 				else
 				{
-					error("Expected )\n");
+					error("Expected )");
 					parser_info.er = closeParenExpected;
 					parser_info.tk = next_token;
 					return parser_info;
@@ -1478,7 +1478,7 @@ ParserInfo subroutineDeclar()
 			}
 			else
 			{
-				error("Expected (\n");
+				error("Expected (");
 				parser_info.er = openParenExpected;
 				parser_info.tk = next_token;
 				return parser_info;
@@ -1486,7 +1486,7 @@ ParserInfo subroutineDeclar()
 		}
 		else
 		{
-			error("Expected ID\n");
+			error("Expected ID");
 			parser_info.er = idExpected;
 			parser_info.tk = next_token;
 			return parser_info;
@@ -1618,7 +1618,7 @@ ParserInfo classVarDeclar()
 			}
 			else
 			{
-				error("Expected ID\n");
+				error("Expected ID");
 				parser_info.er = idExpected;
 				parser_info.tk = next_token;
 				return parser_info;
@@ -1637,7 +1637,7 @@ ParserInfo classVarDeclar()
 		}
 		else
 		{
-			error("Expected a ;\n");
+			error("Expected a ;");
 			parser_info.er = semicolonExpected;
 			parser_info.tk = next_token;
 			return parser_info;
@@ -1645,7 +1645,7 @@ ParserInfo classVarDeclar()
 	}
 	else
 	{
-		error("Expected static or field\n");
+		error("Expected static or field");
 		parser_info.er = classVarErr;
 		parser_info.tk = next_token;
 		return parser_info;
@@ -1682,7 +1682,7 @@ ParserInfo memberDeclar()
 	}
 	else
 	{
-		error("Expected class or subroutine declaration\n");
+		error("Expected class or subroutine declaration");
 		parser_info.er = memberDeclarErr;
 		parser_info.tk = next_token;
 		return parser_info;
@@ -1766,7 +1766,7 @@ ParserInfo classDeclar()
 			}
 			else
 			{
-				error("Expected {\n");
+				error("Expected {");
 				parser_info.er = openBraceExpected;
 				parser_info.tk = next_token;
 				return parser_info;
@@ -1774,7 +1774,7 @@ ParserInfo classDeclar()
 		}
 		else
 		{
-			error("id expected\n");
+			error("id expected");
 			parser_info.er = idExpected;
 			parser_info.tk = next_token;
 			return parser_info;
@@ -1782,7 +1782,7 @@ ParserInfo classDeclar()
 	}
 	else
 	{
-		error("class expected\n");
+		error("class expected");
 		parser_info.er = classExpected;
 		parser_info.tk = next_token;
 		return parser_info;
