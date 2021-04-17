@@ -477,14 +477,21 @@ ParserInfo varDeclarStatement()
 	if (!strcmp(next_token.lx, "var"))
 	{
 		Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
-		strcpy(symbol->kind, next_token.lx);
 		char kind[16];
-		strcpy(kind, next_token.lx);
-		Token symbol_token = PeekNextToken();
 		char tp[16];
-		strcpy(tp, symbol_token.lx);
+		Token symbol_token;
+		if (!pass)
+		{
+			strcpy(symbol->kind, next_token.lx);
+			strcpy(kind, next_token.lx);
+			symbol_token = PeekNextToken();
+			strcpy(tp, symbol_token.lx);
+		}
 		parser_info = type();
-		strcpy(symbol->type, symbol_token.lx);
+		if (!pass)
+		{
+			strcpy(symbol->type, symbol_token.lx);
+		}
 		if (parser_info.er != none)
 		{
 			return parser_info;
@@ -499,9 +506,12 @@ ParserInfo varDeclarStatement()
 		if (next_token.tp == ID)
 		{
 			//TODO check if already declared - in scope
-			strcpy(symbol->name, next_token.lx);
-			symbol->kind_index = current_scope->index.index_var++;
-			add_symbol(current_scope, symbol);
+			if (!pass)
+			{
+				strcpy(symbol->name, next_token.lx);
+				symbol->kind_index = current_scope->index.index_var++;
+				add_symbol(current_scope, symbol);
+			}
 		}
 		else
 		{
@@ -533,9 +543,12 @@ ParserInfo varDeclarStatement()
 			if (next_token.tp == ID)
 			{
 				//TODO check if already declared - in scope
-				strcpy(symbol->name, next_token.lx);
-				symbol->kind_index = current_scope->index.index_var++;
-				add_symbol(current_scope, symbol);
+				if (!pass)
+				{
+					strcpy(symbol->name, next_token.lx);
+					symbol->kind_index = current_scope->index.index_var++;
+					add_symbol(current_scope, symbol);
+				}
 				next_token = PeekNextToken();
 				if (next_token.tp == ERR)
 				{
@@ -759,7 +772,10 @@ ParserInfo ifStatement()
 		}
 		if (!strcmp(next_token.lx, "{"))
 		{
-			current_scope = new_scope(current_scope);
+			if (!pass)
+			{
+				current_scope = new_scope(current_scope);
+			}
 			parser_info = subroutineBody();
 			if (parser_info.er != none)
 			{
@@ -785,7 +801,10 @@ ParserInfo ifStatement()
 			}
 			if (!strcmp(next_token.lx, "{"))
 			{
-				current_scope = new_scope(current_scope);
+				if (!pass)
+				{
+					current_scope = new_scope(current_scope);
+				}
 				parser_info = subroutineBody();
 				if (parser_info.er != none)
 				{
@@ -866,7 +885,10 @@ ParserInfo whileStatement()
 		}
 		if (!strcmp(next_token.lx, "{"))
 		{
-			current_scope = new_scope(current_scope);
+			if (!pass)
+			{
+				current_scope = new_scope(current_scope);
+			}
 			parser_info = subroutineBody();
 			if (parser_info.er != none)
 			{
@@ -1236,8 +1258,11 @@ ParserInfo paramList()
 	{
 		Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
 		parser_info = type();
-		strcpy(symbol->type, next_token.lx);
-		strcpy(symbol->kind, "arg");
+		if (!pass)
+		{
+			strcpy(symbol->type, next_token.lx);
+			strcpy(symbol->kind, "arg");
+		}
 
 		if (parser_info.er != none)
 		{
@@ -1252,9 +1277,12 @@ ParserInfo paramList()
 		}
 		if (next_token.tp == ID)
 		{
-			strcpy(symbol->name, next_token.lx);
-			symbol->kind_index = current_scope->index.index_arg++;
-			add_symbol(current_scope, symbol);
+			if (!pass)
+			{
+				strcpy(symbol->name, next_token.lx);
+				symbol->kind_index = current_scope->index.index_arg++;
+				add_symbol(current_scope, symbol);
+			}
 		}
 		else
 		{
@@ -1275,10 +1303,14 @@ ParserInfo paramList()
 			GetNextToken();
 			Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
 			Token symbol_token;
-			symbol_token = PeekNextToken();
+			if (!pass)
+				symbol_token = PeekNextToken();
 			parser_info = type();
-			strcpy(symbol->type, symbol_token.lx);
-			strcpy(symbol->kind, "arg");
+			if (!pass)
+			{
+				strcpy(symbol->type, symbol_token.lx);
+				strcpy(symbol->kind, "arg");
+			}
 			if (parser_info.er != none)
 			{
 				return parser_info;
@@ -1292,9 +1324,12 @@ ParserInfo paramList()
 			}
 			if (next_token.tp == ID)
 			{
-				strcpy(symbol->name, next_token.lx);
-				symbol->kind_index = current_scope->index.index_arg++;
-				add_symbol(current_scope, symbol);
+				if (!pass)
+				{
+					strcpy(symbol->name, next_token.lx);
+					symbol->kind_index = current_scope->index.index_arg++;
+					add_symbol(current_scope, symbol);
+				}
 				next_token = PeekNextToken();
 				if (next_token.tp == ERR)
 				{
@@ -1330,16 +1365,19 @@ ParserInfo subroutineDeclar()
 	{
 		int is_method = 0;
 		Symbol *subroutine_symbol = (Symbol *)malloc(sizeof(Symbol));
-		if (!strcmp(next_token.lx, "constructor"))
-			strcpy(subroutine_symbol->kind, "constructor");
-		else if (!strcmp(next_token.lx, "function"))
-			strcpy(subroutine_symbol->kind, "function");
-		else if (!strcmp(next_token.lx, "method"))
+		if (!pass)
 		{
-			strcpy(subroutine_symbol->kind, "method");
-			is_method = 1;
+			if (!strcmp(next_token.lx, "constructor"))
+				strcpy(subroutine_symbol->kind, "constructor");
+			else if (!strcmp(next_token.lx, "function"))
+				strcpy(subroutine_symbol->kind, "function");
+			else if (!strcmp(next_token.lx, "method"))
+			{
+				strcpy(subroutine_symbol->kind, "method");
+				is_method = 1;
+			}
+			subroutine_symbol->kind_index = 0;
 		}
-		subroutine_symbol->kind_index = 0;
 		next_token = PeekNextToken();
 		if (next_token.tp == ERR)
 		{
@@ -1349,13 +1387,15 @@ ParserInfo subroutineDeclar()
 		}
 		if (!strcmp(next_token.lx, "void"))
 		{
-			strcpy(subroutine_symbol->type, "void");
+			if (!pass)
+				strcpy(subroutine_symbol->type, "void");
 			GetNextToken();
 		}
 		else
 		{
 			parser_info = type();
-			strcpy(subroutine_symbol->type, next_token.lx);
+			if (!pass)
+				strcpy(subroutine_symbol->type, next_token.lx);
 			if (parser_info.er != none)
 			{
 				return parser_info;
@@ -1370,8 +1410,11 @@ ParserInfo subroutineDeclar()
 		}
 		if (next_token.tp == ID)
 		{
-			strcpy(subroutine_symbol->name, next_token.lx);
-			add_symbol(current_scope, subroutine_symbol);
+			if (!pass)
+			{
+				strcpy(subroutine_symbol->name, next_token.lx);
+				add_symbol(current_scope, subroutine_symbol);
+			}
 			next_token = GetNextToken();
 			if (next_token.tp == ERR)
 			{
@@ -1381,19 +1424,22 @@ ParserInfo subroutineDeclar()
 			}
 			if (!strcmp(next_token.lx, "("))
 			{
-				if (is_method)
+				if (!pass)
 				{
-					current_scope = new_scope(current_scope);
-					Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
-					strcpy(symbol->name, "this");
-					strcpy(symbol->type, current_class);
-					strcpy(symbol->kind, "arg");
-					symbol->kind_index = symbol->kind_index = current_scope->index.index_arg++;
-					add_symbol(current_scope, symbol);
-				}
-				else
-				{
-					current_scope = new_scope(current_scope);
+					if (is_method)
+					{
+						current_scope = new_scope(current_scope);
+						Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
+						strcpy(symbol->name, "this");
+						strcpy(symbol->type, current_class);
+						strcpy(symbol->kind, "arg");
+						symbol->kind_index = symbol->kind_index = current_scope->index.index_arg++;
+						add_symbol(current_scope, symbol);
+					}
+					else
+					{
+						current_scope = new_scope(current_scope);
+					}
 				}
 				parser_info = paramList();
 				if (parser_info.er != none)
@@ -1456,20 +1502,29 @@ ParserInfo classVarDeclar()
 	if (!strcmp(next_token.lx, "static") || !strcmp(next_token.lx, "field"))
 	{
 		int static_field;
-		if (!strcmp(next_token.lx, "static"))
-			static_field = 0;
-		else
-			static_field = 1;
-
+		Token symbol_token;
 		Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
-		strcpy(symbol->kind, next_token.lx);
 		char kind[16];
-		strcpy(kind, next_token.lx);
-		Token symbol_token = PeekNextToken();
-		parser_info = type();
-		strcpy(symbol->type, symbol_token.lx);
 		char tp[16];
-		strcpy(tp, symbol->type);
+		if (!pass)
+		{
+			if (!strcmp(next_token.lx, "static"))
+				static_field = 0;
+			else
+				static_field = 1;
+
+			strcpy(symbol->kind, next_token.lx);
+
+			strcpy(kind, next_token.lx);
+			symbol_token = PeekNextToken();
+		}
+		parser_info = type();
+		if (!pass)
+		{
+			strcpy(symbol->type, symbol_token.lx);
+
+			strcpy(tp, symbol->type);
+		}
 		if (parser_info.er != none)
 		{
 			return parser_info;
@@ -1483,18 +1538,20 @@ ParserInfo classVarDeclar()
 		}
 		if (next_token.tp == ID)
 		{
-			strcpy(symbol->name, next_token.lx);
-			if (static_field == 0)
+			if (!pass)
 			{
-				symbol->kind_index = current_scope->index.index_static++;
+				strcpy(symbol->name, next_token.lx);
+				if (static_field == 0)
+				{
+					symbol->kind_index = current_scope->index.index_static++;
+				}
+				else
+				{
+					symbol->kind_index = current_scope->index.index_field++;
+				}
+				add_symbol(current_scope, symbol);
 			}
-			else
-			{
-				symbol->kind_index = current_scope->index.index_field++;
-			}
-			add_symbol(current_scope, symbol);
 		}
-
 		else
 		{
 			error("Expected identifier");
@@ -1512,8 +1569,11 @@ ParserInfo classVarDeclar()
 		while (next_token.tp == SYMBOL && !strcmp(next_token.lx, ","))
 		{
 			Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
-			strcpy(symbol->kind, kind);
-			strcpy(symbol->type, tp);
+			if (!pass)
+			{
+				strcpy(symbol->kind, kind);
+				strcpy(symbol->type, tp);
+			}
 			GetNextToken();
 			next_token = GetNextToken();
 			if (next_token.tp == ERR)
@@ -1524,16 +1584,19 @@ ParserInfo classVarDeclar()
 			}
 			if (next_token.tp == ID)
 			{
-				strcpy(symbol->name, next_token.lx);
-				if (static_field == 0)
+				if (!pass)
 				{
-					symbol->kind_index = current_scope->index.index_static++;
+					strcpy(symbol->name, next_token.lx);
+					if (static_field == 0)
+					{
+						symbol->kind_index = current_scope->index.index_static++;
+					}
+					else
+					{
+						symbol->kind_index = current_scope->index.index_field++;
+					}
+					add_symbol(current_scope, symbol);
 				}
-				else
-				{
-					symbol->kind_index = current_scope->index.index_field++;
-				}
-				add_symbol(current_scope, symbol);
 				next_token = PeekNextToken();
 				if (next_token.tp == ERR)
 				{
@@ -1629,9 +1692,12 @@ ParserInfo classDeclar()
 	}
 	if (!strcmp(next_token.lx, "class"))
 	{
-		Symbol_table *class_scope = create_symbol_table();
-		current_scope = class_scope;
-		all_symbol_tables.table[all_symbol_tables.table_size++] = current_scope;
+		if (!pass)
+		{
+			Symbol_table *class_scope = create_symbol_table();
+			current_scope = class_scope;
+			all_symbol_tables.table[all_symbol_tables.table_size++] = current_scope;
+		}
 		next_token = GetNextToken();
 		if (next_token.tp == ERR)
 		{
@@ -1641,11 +1707,14 @@ ParserInfo classDeclar()
 		}
 		if (next_token.tp == ID)
 		{
-			strcpy(current_class, next_token.lx);
-			Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
-			strcpy(symbol->name, current_class);
-			strcpy(symbol->kind, "class");
-			add_symbol(current_scope, symbol);
+			if (!pass)
+			{
+				strcpy(current_class, next_token.lx);
+				Symbol *symbol = (Symbol *)malloc(sizeof(Symbol));
+				strcpy(symbol->name, current_class);
+				strcpy(symbol->kind, "class");
+				add_symbol(current_scope, symbol);
+			}
 			next_token = GetNextToken();
 			if (next_token.tp == ERR)
 			{
