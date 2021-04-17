@@ -30,11 +30,10 @@ ParserInfo compile(char *dir_name)
 {
 	ParserInfo p;
 	p.er = none;
-	//system("ls *.jack > libs.txt");
-	char cmd[128] = "cd ";
+	char cmd[128] = "ls *.jack > libs.txt; cd ";
 	strcat(cmd, dir_name);
 	strcat(cmd, "; ls *.jack > files.txt");
-	//system(cmd);
+	system(cmd);
 
 	char files_path[32] = "";
 	strcat(files_path, dir_name);
@@ -83,6 +82,9 @@ ParserInfo compile(char *dir_name)
 		InitParser(path);
 		p = Parse();
 		strcpy(path, dir_name);
+	}
+	if(p.er != none) {
+		return p;
 	}
 
 	pass = 1;

@@ -49,9 +49,11 @@ struct Symbol_table
 
 typedef struct Symbol_table Symbol_table;
 
-int lookup_symbol_scope(Symbol_table *t, Symbol symbol);
+int lookup_symbol_scope(Symbol_table *t, Symbol *symbol);
 
-int lookup_symbol_global(Symbol_table *t, Symbol symbol);
+int lookup_symbol_global(Symbol_table *t, Symbol *symbol);
+
+int lookup_symbol_files(Symbol *symbol);
 
 int add_symbol(Symbol_table *t, Symbol *symbol);
 

@@ -49,21 +49,21 @@ Symbol_table *new_scope(Symbol_table *scope)
     return t;
 }
 
-int lookup_symbol_scope(Symbol_table *t, Symbol symbol)
+int lookup_symbol_scope(Symbol_table *t, Symbol *symbol)
 {
     for (int i = 0; i < t->table_size; i++)
     {
-        if (!strcmp(t->table[i]->name, symbol.name))
+        if (!strcmp(t->table[i]->name, symbol->name))
             return 1;
     }
     return 0;
 }
 
-int lookup_symbol_global(Symbol_table *t, Symbol symbol)
+int lookup_symbol_global(Symbol_table *t, Symbol *symbol)
 {
     for (int i = 0; i < t->table_size; i++)
     {
-        if (!strcmp(t->table[i]->name, symbol.name))
+        if (!strcmp(t->table[i]->name, symbol->name))
             return 1;
     }
     if (t->parent == NULL)

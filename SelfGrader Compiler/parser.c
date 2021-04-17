@@ -510,6 +510,12 @@ ParserInfo varDeclarStatement()
 			{
 				strcpy(symbol->name, next_token.lx);
 				symbol->kind_index = current_scope->index.index_var++;
+				if (lookup_symbol_scope(current_scope, symbol))
+				{
+					parser_info.er = redecIdentifier;
+					parser_info.tk = next_token;
+					return parser_info;
+				}
 				add_symbol(current_scope, symbol);
 			}
 		}
@@ -1514,7 +1520,6 @@ ParserInfo classVarDeclar()
 				static_field = 1;
 
 			strcpy(symbol->kind, next_token.lx);
-
 			strcpy(kind, next_token.lx);
 			symbol_token = PeekNextToken();
 		}
@@ -1522,7 +1527,6 @@ ParserInfo classVarDeclar()
 		if (!pass)
 		{
 			strcpy(symbol->type, symbol_token.lx);
-
 			strcpy(tp, symbol->type);
 		}
 		if (parser_info.er != none)
@@ -1548,6 +1552,12 @@ ParserInfo classVarDeclar()
 				else
 				{
 					symbol->kind_index = current_scope->index.index_field++;
+				}
+				if (lookup_symbol_scope(current_scope, symbol))
+				{
+					parser_info.er = redecIdentifier;
+					parser_info.tk = next_token;
+					return parser_info;
 				}
 				add_symbol(current_scope, symbol);
 			}
