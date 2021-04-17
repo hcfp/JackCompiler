@@ -6,6 +6,7 @@
 #include "parser.h"
 #include "symbols.h"
 
+extern int pass;
 // you can declare prototypes of parser functions below
 
 ParserInfo type();

@@ -20,9 +20,10 @@ Date Work Commenced: 1/04/2021
 #include "parser.h"
 #include "symbols.h"
 
+int pass;
+
 int InitCompiler()
 {
-	pass = 0;
 	all_symbol_tables.table_size = 0;
 }
 
@@ -33,7 +34,7 @@ ParserInfo compile(char *dir_name)
 	char cmd[128] = "ls *.jack > libs.txt; cd ";
 	strcat(cmd, dir_name);
 	strcat(cmd, "; ls *.jack > files.txt");
-	system(cmd);
+	//system(cmd);
 
 	char files_path[32] = "";
 	strcat(files_path, dir_name);
@@ -75,6 +76,7 @@ ParserInfo compile(char *dir_name)
 	char path[32] = "";
 	strcpy(path, dir_name);
 
+	pass = 0;
 	for (i = 0; i < num_files; i++)
 	{
 		strcat(path, "/");
