@@ -107,7 +107,7 @@ int StopCompiler()
 }
 
 #ifndef TEST_COMPILER
-int main()
+int main_compiler()
 {
 	InitCompiler();
 	ParserInfo p = compile("Pong");

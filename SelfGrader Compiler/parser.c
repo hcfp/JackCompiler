@@ -1845,7 +1845,7 @@ int StopParser()
 }
 
 #ifndef TEST_PARSER
-int main()
+int main_parser()
 {
 	Parse();
 	return 1;

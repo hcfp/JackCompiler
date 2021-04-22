@@ -363,9 +363,8 @@ int StopLexer()
   return 0;
 }
 
-// do not remove the next line
 #ifndef TEST
-int main()
+int main_lexer()
 {
   // implement your main function here
   // NOTE: the autograder will not use your main function
@@ -388,5 +387,4 @@ int main()
   StopLexer();
   return 0;
 }
-// do not remove the next line
 #endif

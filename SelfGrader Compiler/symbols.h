@@ -5,8 +5,6 @@
 #include "parser.h"
 #include <stdlib.h>
 
-// define your own types and function prototypes for the symbol table(s) module below
-
 char current_class[32];
 
 typedef struct
