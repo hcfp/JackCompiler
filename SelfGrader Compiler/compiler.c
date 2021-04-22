@@ -34,7 +34,7 @@ ParserInfo compile(char *dir_name)
 	char cmd[128] = "ls *.jack > libs.txt; cd ";
 	strcat(cmd, dir_name);
 	strcat(cmd, "; ls *.jack > files.txt");
-	//system(cmd);
+	system(cmd);
 
 	char files_path[32] = "";
 	strcat(files_path, dir_name);
