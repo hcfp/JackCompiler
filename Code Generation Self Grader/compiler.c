@@ -48,18 +48,21 @@ ParserInfo compile(char *dir_name)
 	while (fgets(lib_files[i], 32, fptr))
 	{
 		lib_files[i][strlen(lib_files[i]) - 1] = '\0';
-		i++;
 		FILE *vm_ptr = NULL;
-		char vm_name[64];
+		char vm_name[16];
 		int j = 0;
-		while (lib_files[i][j] != '.')
+		while (lib_files[i][j] != '.' && j < strlen(lib_files[i]))
 		{
 			vm_name[j] = lib_files[i][j];
 			j++;
 		}
+		int len = j;
+		vm_name[j] = '\0';
 		strcat(vm_name, ".vm");
 		vm_ptr = fopen(vm_name, "w");
 		fclose(vm_ptr);
+		strcpy(vm_name, "");
+		i++;
 	}
 	fclose(fptr);
 
@@ -75,6 +78,26 @@ ParserInfo compile(char *dir_name)
 	while (fgets(jack_files[i], 32, fptr))
 	{
 		jack_files[i][strlen(jack_files[i]) - 1] = '\0';
+		FILE *vm_ptr = NULL;
+		char vm_name[16];
+		strcpy(vm_name, dir_name);
+		strcat(vm_name, "/");
+		vm_name[strlen(vm_name)] = '\0';
+		int j = 0;
+		int k = strlen(vm_name);
+		while (jack_files[i][j] != '.' && j < strlen(jack_files[i]))
+		{
+			vm_name[k] = jack_files[i][j];
+			j++;
+			k++;
+		}
+		int len = k;
+		vm_name[len] = '\0';
+		strcat(vm_name, ".vm");
+		printf("%s\n",vm_name);
+		vm_ptr = fopen(vm_name, "w");
+		fclose(vm_ptr);
+		strcpy(vm_name, "");
 		i++;
 	}
 	fclose(fptr);
